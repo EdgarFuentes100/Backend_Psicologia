@@ -11,7 +11,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-  origin: 'http://localhost:3000',  // Cambia si usas otra URL frontend
+  origin: [
+    "http://localhost:3000",
+    "https://frontend-psicologia-git-main-edgarfuentes100s-projects.vercel.app"
+  ],
   credentials: true
 }));
 
