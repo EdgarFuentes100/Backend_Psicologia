@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://frontend-psicologia-git-main-edgarfuentes100s-projects.vercel.app"
+    "https://frontend-psicologia-six.vercel.app"
   ],
   credentials: true
 }));
