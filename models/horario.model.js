@@ -8,7 +8,8 @@ async function getHorariosPorDoctor(idDoctor) {
             idHorario,
             diaSemana,
             TIME_FORMAT(horaInicio, '%H:%i') AS horaInicio,
-            TIME_FORMAT(horaFin, '%H:%i') AS horaFin
+            TIME_FORMAT(horaFin, '%H:%i') AS horaFin,
+            estado
         FROM horarios
         WHERE idDoctor = ? 
           AND estado = 1
@@ -21,6 +22,27 @@ async function getHorariosPorDoctor(idDoctor) {
     return rows;
 }
 
+async function getCitasOcupadasPorDoctor(idDoctor, fecha) {
+    console.log(idDoctor, fecha)
+    const query = `
+        SELECT 
+            idCita,
+            idPaciente,
+            TIME_FORMAT(horaInicio, '%H:%i') AS horaInicio,
+            TIME_FORMAT(horaFin, '%H:%i') AS horaFin,
+            estado
+        FROM citas
+        WHERE idDoctor = ? 
+          AND fecha = ?
+          AND estado != 'Cancelada'
+        ORDER BY 
+            horaInicio ASC;
+    `;
+
+    const [rows] = await localDB.query(query, [idDoctor, fecha]);
+    return rows;
+}
 module.exports = {
-    getHorariosPorDoctor 
+    getHorariosPorDoctor,
+    getCitasOcupadasPorDoctor
 };

@@ -26,6 +26,34 @@ async function listaHorario(req, res, next) {
     }
 }
 
+async function listaHorarioOcupado(req, res, next) {
+    try {
+        // 1. Capturamos los parámetros de la URL
+        const { idDoctor, fecha } = req.params;
+        console.log("entro")
+
+        // 2. Validación básica
+        if (!idDoctor || isNaN(idDoctor) || !fecha) {
+            return res.status(400).json({
+                ok: false,
+                message: 'El idDoctor y la fecha son requeridos'
+            });
+        }
+
+        // 3. Llamamos al método del modelo que creamos anteriormente
+        const datos = await Default.getCitasOcupadasPorDoctor(idDoctor, fecha);
+
+        res.json({
+            ok: true,
+            message: 'Lista de horas ocupadas obtenida',
+            datos
+        });
+    } catch (err) { 
+        next(err); 
+    }
+}
+
 module.exports = {
-    listaHorario
+    listaHorario,
+    listaHorarioOcupado
 };
