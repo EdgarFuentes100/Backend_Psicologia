@@ -8,6 +8,7 @@ const areaRoutes = require('./routes/area.routes');
 const doctorRoutes = require('./routes/doctor.routes');
 const horarioRoutes = require('./routes/horario.routes');
 const servicioRoutes = require('./routes/servicio.routes');
+const citaRoutes = require('./routes/citas.routes');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/v1/area', areaRoutes);
 app.use('/api/v1/doctor', doctorRoutes);
 app.use('/api/v1/horario', horarioRoutes);
 app.use('/api/v1/servicio', servicioRoutes);
+app.use('/api/v1/cita', citaRoutes);
 
 
 app.listen(4000, () => console.log('Servidor en puerto 4000'));
