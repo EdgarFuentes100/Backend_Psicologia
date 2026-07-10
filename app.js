@@ -8,7 +8,7 @@ const areaRoutes = require('./routes/area.routes');
 const doctorRoutes = require('./routes/doctor.routes');
 const horarioRoutes = require('./routes/horario.routes');
 const servicioRoutes = require('./routes/servicio.routes');
-const citaRoutes = require('./routes/citas.routes');
+const citaRoutes = require('./routes/cita.routes');
 
 const app = express();
 
