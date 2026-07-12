@@ -57,7 +57,33 @@ async function crearCita(citaData) {
     return result.insertId;
 }
 
+async function getMisCitas(idUsuario) {
+    const query = `
+                SELECT 
+                    u.idUsuario,
+                    c.idCita,
+                    c.fecha,
+                    c.horaInicio,
+                    c.horaFin,
+                    c.estado,
+                    c.link,
+                    CONCAT(doc.nombres,' ',doc.apellidos) AS nombreDoctor,
+                    CONCAT('Servicio: ', s.nombre, ' - $', s.precio, ' - ', a.nombre) AS detalleServicio
+                FROM citas c
+                JOIN personas p ON c.idPersona = p.idPersona 
+                JOIN usuarios u ON p.idUsuario = u.idUsuario
+                JOIN doctores d ON c.idDoctor = d.idDoctor
+                JOIN personas doc ON d.idPersona = doc.idPersona
+                JOIN servicios s ON c.idServicio = s.idServicio
+                JOIN areas a ON s.idArea = a.idArea
+                WHERE u.idUsuario = ?; `;
+
+    const [rows] = await localDB.query(query, [idUsuario]);
+    return rows;
+}
+
 module.exports = {
     getCitasPorDoctor,
-    crearCita
+    crearCita,
+    getMisCitas
 };
