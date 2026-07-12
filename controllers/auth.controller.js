@@ -21,7 +21,7 @@ async function loginUser(req, res) {
       httpOnly: true,
       maxAge: 3600000, // 1 hora
       sameSite: 'lax',  // protege contra CSRF
-      secure: false     // true en producción con HTTPS
+      secure: true     // true en producción con HTTPS
     });
 
     res.json({ ok: true, datos: usuario });
