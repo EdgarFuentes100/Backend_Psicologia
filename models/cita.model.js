@@ -5,20 +5,22 @@ const { localDB } = require('../config/db');
  */
 async function getCitasPorDoctor(idUsuario) {
     const query = `
-        SELECT 
-            c.idCita, 
-            c.fecha, 
-            c.horaInicio, 
-            c.horaFin, 
-            c.estado,
-            p.nombres AS nombrePaciente, 
-            p.apellidos AS apellidoPaciente
-        FROM citas c
-        JOIN doctores d ON c.idDoctor = d.idDoctor
-        JOIN personas per ON d.idPersona = per.idPersona
-        JOIN personas p ON c.idPaciente = p.idPersona
-        WHERE per.idUsuario = ?;
-    `;
+                SELECT 
+                    c.idCita,
+                    c.fecha,
+                    c.horaInicio,
+                    c.horaFin,
+                    c.estado,
+                    c.link,
+                    CONCAT(p.nombres,' ',p.apellidos) AS nombrePaciente,
+                    CONCAT('Servicio: ', s.nombre,' - $',s.precio,' - ',a.nombre) AS detalleServicio
+                FROM citas c
+                JOIN doctores d ON c.idDoctor = d.idDoctor
+                JOIN personas per ON d.idPersona = per.idPersona
+                JOIN personas p ON c.idPersona = p.idPersona
+                JOIN servicios s ON c.idServicio = s.idServicio
+                JOIN areas a ON a.idArea = s.idArea
+                WHERE per.idUsuario = ?; `;
 
     const [rows] = await localDB.query(query, [idUsuario]);
     return rows;
@@ -26,9 +28,7 @@ async function getCitasPorDoctor(idUsuario) {
 
 
 async function crearCita(citaData) {
-    const { idUsuario, idDoctor, idServicio, fecha, horaInicio } = citaData;
-
-    const idPaciente = idUsuario;
+    const { idPersona, idDoctor, idServicio, fecha, horaInicio } = citaData;
 
     // Calcular horaFin (+45 minutos)
     const [hora, minutos] = horaInicio.split(':').map(Number);
@@ -41,12 +41,12 @@ async function crearCita(citaData) {
 
     const query = `
         INSERT INTO citas 
-        (idPaciente, idDoctor, idServicio, fecha, horaInicio, horaFin, estado)
+        (idPersona, idDoctor, idServicio, fecha, horaInicio, horaFin, estado)
         VALUES (?, ?, ?, ?, ?, ?, 'Confirmada')
     `;
 
     const [result] = await localDB.query(query, [
-        idPaciente,
+        idPersona,
         idDoctor,
         idServicio,
         fecha,

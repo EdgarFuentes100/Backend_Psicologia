@@ -27,7 +27,7 @@ async function getCitasOcupadasPorDoctor(idDoctor, fecha) {
     const query = `
         SELECT 
             idCita,
-            idPaciente,
+            idPersona,
             TIME_FORMAT(horaInicio, '%H:%i') AS horaInicio,
             TIME_FORMAT(horaFin, '%H:%i') AS horaFin,
             estado

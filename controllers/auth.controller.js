@@ -10,7 +10,8 @@ async function loginUser(req, res) {
 
     // Crear token JWT con datos mínimos
     const token = jwt.sign({
-      id: usuario.idUsuario,
+      idUsuario: usuario.idUsuario,
+      idPersona: usuario.idPersona,
       nombre: usuario.nombre,
       rol: usuario.rol
     }, SECRET_KEY, { expiresIn: '1h' });

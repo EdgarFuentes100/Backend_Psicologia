@@ -25,19 +25,10 @@ async function listaCitas(req, res, next) {
 
 async function registrarCita(req, res, next) {
     try {
-        const { idUsuario, idDoctor, idServicio, fecha, horaInicio } = req.body;
-
-        console.log("Datos recibidos para registrar cita:");
-        console.log({
-            idUsuario,
-            idDoctor,
-            idServicio,
-            fecha,
-            horaInicio
-        });
+        const { idPersona, idDoctor, idServicio, fecha, horaInicio } = req.body;
 
         // Validación básica
-        if (!idUsuario || !idDoctor || !idServicio || !fecha || !horaInicio) {
+        if (!idPersona || !idDoctor || !idServicio || !fecha || !horaInicio) {
             console.log("Faltan datos obligatorios");
             return res.status(400).json({
                 ok: false,
@@ -45,10 +36,8 @@ async function registrarCita(req, res, next) {
             });
         }
 
-        console.log("Enviando al modelo crearCita...");
-
         const nuevaCitaId = await Default.crearCita({
-            idUsuario,
+            idPersona,
             idDoctor,
             idServicio,
             fecha,
